@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ObservableCollectionExample.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:localM="clr-namespace:ObservableCollectionExample.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ObservableCollectionExample.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+		Name="mainWindow"
+        Title="ObservableCollectionExample">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+	<Window.Resources>
+		<vm:BitmapAssetValueConverter x:Key="variableImage"/>
+	</Window.Resources>
+
+	<Window.DataTemplates>
+		<DataTemplate DataType="{x:Type localM:CustomItem}">
+			<Grid ColumnDefinitions="0.2*, 0.5*, 0.3*" RowDefinitions="*">
+				<Image Grid.Column="0" Height="40" Width="40" Source="{Binding ImagePath, Converter={StaticResource variableImage}}"/>
+				<TextBox Grid.Column="1" Text="{Binding Text}"/>
+				<Button Grid.Column="2" Content="{Binding ButtonText}"
+						Command="{Binding #mainWindow.DataContext.ButtonCommand}"
+						CommandParameter="{Binding}"/>
+			</Grid>
+		</DataTemplate>
+	</Window.DataTemplates>
+
+	<Grid ShowGridLines="True" ColumnDefinitions="0.25*, 0.25*, 0.25*" RowDefinitions="30, *, 100">
+		<!--Static ListBox items-->
+		<TextBlock Text="Static ListBox" FontSize="24"/>
+		<ListBox Grid.Column="0" Grid.Row="1" Name="staticListBox">
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item1" ImagePath="Assets/pic/christmas-sock.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item2" ImagePath="Assets/pic/earmuffs.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item3" ImagePath="Assets/pic/heater.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item4" ImagePath="Assets/pic/hot-drink.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item5" ImagePath="Assets/pic/mountain.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item6" ImagePath="Assets/pic/penguin.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item7" ImagePath="Assets/pic/pine-tree.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+			<ListBoxItem>
+				<localM:CustomItem Text ="Item8" ImagePath="Assets/pic/snowman.png" ButtonText="Click Me!"/>
+			</ListBoxItem>
+		</ListBox>
+
+
+		<ContentControl Grid.Row="2" Content="{Binding CItem}"/>
+
+		<!--Items for ListBox from ObservableCollection-->
+		<TextBlock Grid.Column="1" Text="Dynamic ListBox" FontSize="24"/>
+		<ListBox Grid.Column="1" Grid.Row="1" Items="{Binding CustomItemsObservableCollection}"/>
+
+		<!--Dynamic ItemsControl-->
+		<!--Items for ListBox from ObservableCollection-->
+		<TextBlock Grid.Column="2" Text="Dynamic ItemsControl" FontSize="24"/>
+		<ScrollViewer Grid.Column="2" Grid.Row="1">
+		<ItemsControl Grid.Column="2" Grid.Row="1" Items="{Binding CustomItemsObservableCollection}" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+		</ScrollViewer>
+		<Button Grid.Column="1" Grid.Row="2" Content="Add Item" Command="{Binding AddItemCommand}"/>
+		<Button Grid.Column="2" Grid.Row="2" Content="Delete Item" Command="{Binding DeleteItemCommand}"/>
+	</Grid>
+
+</Window>
